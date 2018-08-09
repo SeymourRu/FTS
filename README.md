@@ -1,2 +1,2 @@
 # FTS
-Fuck The Seller engine
+Fuck The Sellers engine
