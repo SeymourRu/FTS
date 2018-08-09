@@ -17,14 +17,15 @@ namespace FuckTheSellersEngine
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<IniSettings>().As<IIniSettings>();
+            builder.RegisterType<Fucker>().As<IRobot>();
             return builder.Build();
         }
 
         static void Main(string[] args)
         {
             _container = BuildContainer();
-            var inis = _container.Resolve<IIniSettings>();
-
+            var robot = _container.Resolve<IRobot>();
+            robot.Run();
             Console.ReadLine();
         }
     }
