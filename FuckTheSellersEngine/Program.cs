@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Builder;
 using FuckTheSellersEngine.Settings;
+using FuckTheSellersEngine.ModulesMgr;
 
 namespace FuckTheSellersEngine
 {
@@ -17,6 +18,7 @@ namespace FuckTheSellersEngine
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<IniSettings>().As<IIniSettings>();
+            builder.RegisterType<ModuleManager>().As<IModuleManager>();
             builder.RegisterType<Fucker>().As<IRobot>();
             return builder.Build();
         }

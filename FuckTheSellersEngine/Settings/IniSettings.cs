@@ -13,7 +13,10 @@ namespace FuckTheSellersEngine.Settings
     {
         public int RefreshHours { get; private set; }
         public int RefreshMinutes { get; private set; }
-        public List<string> Modules { get; private set; }
+
+        public string ModuleSubdir { get; private set; }
+
+        public List<KeyValuePair<string, string>> Modules { get; private set; }
 
         public IniSettings()
         {
@@ -26,12 +29,15 @@ namespace FuckTheSellersEngine.Settings
 
             var modulesSection = parsedData.Sections.GetSectionData("Modules");
             var count = int.Parse(modulesSection.Keys.GetKeyData("ModuleCount").Value);
+            this.ModuleSubdir = modulesSection.Keys.GetKeyData("ModuleSubdir").Value;
 
-            this.Modules = new List<string>();
+            this.Modules = new List<KeyValuePair<string, string>>();
 
-            for (int i = 0; i < count;i++ )
+            for (int i = 0; i < count; i++)
             {
-                this.Modules.Add(modulesSection.Keys.GetKeyData("Module" + (i + 1)).Value);
+                var moduleName = modulesSection.Keys.GetKeyData("ModuleName" + (i + 1)).Value;
+                var dbName = modulesSection.Keys.GetKeyData("ModuleDBName" + (i + 1)).Value;
+                this.Modules.Add(new KeyValuePair<string, string>(moduleName, dbName));
             }
         }
     }

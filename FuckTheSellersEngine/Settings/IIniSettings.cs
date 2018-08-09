@@ -10,6 +10,7 @@ namespace FuckTheSellersEngine.Settings
     {
         int RefreshHours { get; }
         int RefreshMinutes { get; }
-        List<string> Modules { get; }
+        string ModuleSubdir { get; }
+        List<KeyValuePair<string, string>> Modules { get; }
     }
 }
