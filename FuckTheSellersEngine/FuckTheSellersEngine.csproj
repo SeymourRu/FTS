@@ -98,6 +98,15 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ModulesMgr\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FTSModuleSDK\FTSModuleSDK.csproj">
+      <Project>{8beb665f-6002-4470-9175-d229cac74f5c}</Project>
+      <Name>FTSModuleSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
