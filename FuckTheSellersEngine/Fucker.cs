@@ -20,8 +20,6 @@ namespace FuckTheSellersEngine
 
         public bool Run()
         {
-            Console.WriteLine("If you are seller - I`ll fuck you");
-
             _moduleManager.Init();
             if (_moduleManager.Run())
             {

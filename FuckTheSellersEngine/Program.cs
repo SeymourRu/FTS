@@ -27,8 +27,14 @@ namespace FuckTheSellersEngine
         {
             _container = BuildContainer();
             var robot = _container.Resolve<IRobot>();
-            robot.Run();
-            Console.ReadLine();
+            if (robot.Run())
+            {
+                Console.WriteLine("Ok");
+            }
+            else
+            {
+                Console.WriteLine("Not ok");
+            }
         }
     }
 }

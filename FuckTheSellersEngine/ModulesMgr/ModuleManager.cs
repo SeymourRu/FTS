@@ -8,7 +8,6 @@ using FuckTheSellersEngine.Settings;
 using System.Reflection;
 using FTSModuleSDK;
 
-
 namespace FuckTheSellersEngine.ModulesMgr
 {
     public class ModuleManager : IModuleManager
@@ -31,34 +30,42 @@ namespace FuckTheSellersEngine.ModulesMgr
             foreach (var values in _settings.Modules)
             {
                 var fullModulePath = modulesPath + moduleDir + values.Key;
-                var moduleAssembly = System.Reflection.Assembly.LoadFrom(fullModulePath);
-                var moduleTypes = moduleAssembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IModule)));
-
-                var modules = moduleTypes.Select(type =>
+                if (File.Exists(fullModulePath))
                 {
-                    return (IModule)Activator.CreateInstance(type);
-                });
+                    var moduleAssembly = System.Reflection.Assembly.LoadFrom(fullModulePath);
+                    var moduleTypes = moduleAssembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IModule)));
 
-                var task = new Task(() =>
-                {
-                    var modulesCopy = modules;
-                    var subTasks = new List<Task>();
-
-                    foreach (var module in modulesCopy)
+                    var modules = moduleTypes.Select(type =>
                     {
-                        subTasks.Add(new Task(() =>
+                        return (IModule)Activator.CreateInstance(type);
+                    });
+
+                    var task = new Task(() =>
+                    {
+                        var modulesCopy = modules;
+                        var subTasks = new List<Task>();
+
+                        foreach (var module in modulesCopy)
                         {
-                            module.Configure();
-                            module.Run();
-                        }));
-                    }
+                            subTasks.Add(new Task(() =>
+                            {
+                                module.Configure();
+                                module.Run();
+                            }));
+                        }
 
-                    subTasks.ForEach(x => x.Start());
+                        subTasks.ForEach(x => x.Start());
 
-                    Task.WaitAll(subTasks.ToArray());
-                });
+                        Task.WaitAll(subTasks.ToArray());
+                    });
 
-                _runningModules.Add(new ModuleInformation(values.Key, values.Value, task));
+                    _runningModules.Add(new ModuleInformation(values.Key, values.Value, task));
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect path to module :" + fullModulePath);
+                }
+                
             }
         }
 
@@ -76,7 +83,7 @@ namespace FuckTheSellersEngine.ModulesMgr
                 }
                 else
                 {
-                    Console.WriteLine("No one module was registred, nothing to start");
+                    Console.WriteLine("Missing modules, nothing to start");
                 }
             }
 
